@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Quasar App
 
 > A Quasar project
@@ -17,3 +18,7 @@ $ quasar build
 # lint code
 $ quasar lint
 ```
+=======
+# QuasarDesk
+Um projeto do Agilus Desk com o framework Quasar
+>>>>>>> 3c8ccf315929424dafc9c0b6088d3fcfa93ee10b
