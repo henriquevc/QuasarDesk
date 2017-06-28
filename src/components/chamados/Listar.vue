@@ -55,9 +55,9 @@
                     { label: 'ID', field: 'Id', width: '50px', sort: true, type: 'number' },
                     { label: 'Assunto', field: 'Assunto', width: '140px' },
                     { label: 'Remetente', field: 'NomeCliente', width: '100px', sort: true, type: 'string' },
-                    { label: 'Status', field: 'StatusChamado', width: '60px', sort: true },
-                    { label: 'Responsável', field: 'ResponsavelChamado', width: '100px', sort: true, type: 'string' },
-                    { label: 'Tipo de Chamado', field: 'TipoChamado', width: '100px', sort: true, type: 'string' },
+                    { label: 'Status', field: 'StatusChamado', width: '60px' },
+                    { label: 'Responsável', field: 'ResponsavelChamado', width: '100px' },
+                    { label: 'Tipo de Chamado', field: 'TipoChamado', width: '100px' },
                     { label: 'Data de Recebimento', field: 'DataRecebimento', width: '100px', type: 'date', format (value, row) { return new Date(value).toLocaleString() } }
                 ],
                 chamados: [],
