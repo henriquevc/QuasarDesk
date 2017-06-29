@@ -20,9 +20,11 @@
                 <q-datetime  v-model="buscaDataRecebimento" type="date" format="DD/MM/YYYY" float-label="Data Recebimento" @change="buscar" />
             </div>
         </div>
-        {{ $q.theme }}
         <div class="row">
             <q-data-table :data="chamadosFiltrados" :config="config" :columns="columns">
+                <template slot="col-Id" scope="cell">
+                    <a :href="'/editar/'+cell.data">{{cell.data}}</a>
+                </template>            
                 <template slot="col-StatusChamado" scope="cell">
                     <span>{{cell.data.Nome}}</span>
                 </template>
@@ -32,24 +34,39 @@
                 <template slot="col-TipoChamado" scope="cell">
                     <span>{{cell.data.Nome}}</span>
                 </template>
+                <template slot="selection" scope="props">
+                    <q-btn flat color="primary" @click="excluir(props)">
+                        <q-icon name="delete" />
+                    </q-btn>
+                </template>
             </q-data-table>
         </div>
     </div>
 </template>
 <script>
     import {
-        QInput,
-        QSelect,
-        QDatetime,
-        QDataTable
+    Toast,
+    QDataTable,
+    QField,
+    QInput,
+    QCheckbox,
+    QSelect,
+    QSlider,
+    QBtn,
+    QIcon,
+    QTooltip,
+    QCollapsible,
+    QDatetime
     } from 'quasar'
     import axios from 'Axios'
-    
+    import 'quasar-extras/material-icons'
+
     export default {
         data () {
             return {
                 config: {
-                   rowHeight: '4rem'
+                    rowHeight: '4rem',
+                    selection: 'multiple'
                 },
                 columns: [
                     { label: 'ID', field: 'Id', width: '50px', sort: true, type: 'number' },
@@ -78,7 +95,14 @@
             QInput,
             QSelect,
             QDatetime,
-            QDataTable
+            QDataTable,
+            QField,
+            QCheckbox,
+            QSlider,
+            QBtn,
+            QIcon,
+            QTooltip,
+            QCollapsible
         },
         created () {
             let url = 'http://servagilus.dyndns.org:9801/api/'
@@ -125,18 +149,20 @@
                 })
         },
         methods: {
-            excluir (chamado, index) {
-                console.log(chamado.Id + ' - ' + index)
-                /* let url = App.data().urlApi
-                axios.delete(url + 'Chamados/' + chamado.Id)
-                    .then(response => {
-                            let self = this
-                            self.chamados.splice(function (item) {
-                                if (item.Id === chamado.Id) {
-                                    return
-                                }
-                            })
-                    }) */
+            excluir (chamado) {
+                let url = 'http://servagilus.dyndns.org:9801/api/'
+                chamado.rows.forEach(row => {
+                    let self = this
+                    axios.delete(url + 'Chamados/' + row.data.Id).then(response => {
+                        if (response.status === 200) {
+                            self.chamadosFiltrados.splice(row.index, 1)
+                            Toast.create.positive({ html: 'Chamado ' + row.data.Id + ' Excluído' })
+                        }
+                        else {
+                            Toast.create.negative({ html: 'Chamado ' + row.data.Id + ' Excluído' })
+                        }
+                    })
+                })
             },
             buscar () {
                 let self = this

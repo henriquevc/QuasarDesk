@@ -35,7 +35,7 @@ export default new VueRouter({
     {
       path: '/editar/:id',
       name: 'Editar',
-      component: load('chamados/Listar')
+      component: load('chamados/Editar')
     },
     // Always leave this last one
     {
