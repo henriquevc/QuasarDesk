@@ -97,4 +97,7 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="stylus">
+    .layout-padding
+      padding 1rem 2rem
+</style>
