@@ -1,6 +1,6 @@
 <template>
     <div >
-        <div class="row">
+        <div class="row">    
             <div class="col-lg-2 col-md-4 p3">
                 <q-input v-model="buscaId" type="number" float-label="ID" @change="buscar" />
             </div>
@@ -20,11 +20,11 @@
                 <q-datetime  v-model="buscaDataRecebimento" type="date" format="DD/MM/YYYY" float-label="Data Recebimento" @change="buscar" />
             </div>
         </div>
-        <div class="row">
+        <div class="row">       
             <q-data-table :data="chamadosFiltrados" :config="config" :columns="columns">
                 <template slot="col-Id" scope="cell">
                     <a :href="'/editar/'+cell.data">{{cell.data}}</a>
-                </template>            
+                </template>                
                 <template slot="col-StatusChamado" scope="cell">
                     <span>{{cell.data.Nome}}</span>
                 </template>
@@ -39,7 +39,7 @@
                         <q-icon name="delete" />
                     </q-btn>
                 </template>
-            </q-data-table>
+            </q-data-table>             
         </div>
     </div>
 </template>
