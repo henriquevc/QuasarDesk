@@ -1,7 +1,7 @@
 <template>
     <div>
         <q-tabs align="justify" v-model="selectedTab">
-        <q-tab slot="title" :name="status.label" :icon="status.icone" v-for="status in listaStatus" key @select="trocaStatus(status.value)">{{status.label}}</q-tab>
+            <q-tab slot="title" :name="status.label" :icon="status.icone" v-for="status in listaStatus" key @select="trocaStatus(status.value)">{{status.label}}</q-tab>
         </q-tabs>
         <div class="row">
             <div class="col-lg-4 col-md-12">
@@ -17,36 +17,80 @@
             </div>
             <div class="col-lg-8 col-md-12">
                 <q-card v-for="mensagem in chamado.MensagensChamado" key>
-                    {{mensagem.CorpoEmail}}                     
-                </q-card>  
-            </div>
-
+                    <q-card-title class="bg-indigo text-white">
+                        #{{mensagem.Id}} - {{mensagem.DataRecebimento}}
+                        <q-icon color="white" slot="right" name="attach file" v-if="mensagem.AnexosMensagem.length > 0">
+                                <q-popover ref="popover">
+                                    <q-list link class="no-border">
+                                        <q-item link tag="a" exact :href="url+'AnexosMensagens/'+anexo.Id" v-for="anexo in mensagem.AnexosMensagem" key>
+                                            <q-item-main :label="anexo.NomeAnexo" />
+                                        </q-item>
+                                    </q-list>
+                                </q-popover>
+                        </q-icon>                        
+                    </q-card-title>
+                    <q-card-main>
+                       <div v-html="mensagem.CorpoEmail"/>
+                    </q-card-main>                
+                </q-card>   
+                <div class="elevation-10">
+                    <div class="mb-3" id="comentario" v-show="!botaoAtivo">
+                        <vue-editor v-model="content" v-show="!botaoAtivo"></vue-editor>
+                    </div>
+                </div><!--col-12-->
+                <div class="mb-3 mt-3">
+                    <q-btn flat class="bg-positive text-white" v-show="botaoAtivo" @click="alternarVisibilidadeResposta()">Responder <q-icon right name="reply"/></q-btn>
+                    <q-btn flat class="bg-positive text-white" v-show="!botaoAtivo" @click="enviarMensagem()">Enviar <q-icon right name="send"/></q-btn>
+                    <q-btn flat class="bg-negative text-white" v-show="!botaoAtivo" @click="destruirResposta()">Cancelar <q-icon right name="block"/></q-btn>
+                </div><!--col-12-->
+            </div>            
         </div>
     </div>
 </template>
 
 <script>
     import axios from 'Axios'
+    import { VueEditor } from 'vue2-editor'
+    import 'quasar-extras/material-icons'
     import {
         Toast,
         QTabs,
+        QItem,
+        QItemMain,
+        QPopover,
+        QIcon,
+        QList,
         QBtn,
         QTab,
         QTabPane,
         QCard,
+        QCardMain,
+        QCardTitle,
         QInput,
-        QSelect
+        QSelect,
+        QCollapsible,
+        QSideLink
         } from 'quasar'
 
     export default {
         components: {
             QTabs,
+            QItem,
+            QItemMain,
+            QPopover,
+            QIcon,
+            QList,
             QBtn,
             QTab,
             QTabPane,
             QCard,
+            QCardMain,
+            QCardTitle,
             QInput,
-            QSelect
+            QSelect,
+            QCollapsible,
+            VueEditor,
+            QSideLink
         },
         data () {
             return {
@@ -59,7 +103,10 @@
                 responsavelId: null,
                 responsavel: {},
                 tipoChamado: {},
-                statusChamado: {}
+                statusChamado: {},
+                botaoAtivo: true,
+                content: '',
+                url: 'http://servagilus.dyndns.org:9801/api/'
             }
         },
         created () {
@@ -142,7 +189,33 @@
                     })
                     self.chamado.StatusId = value
                 }
+            },
+            enviarMensagem () {
+                axios.post(this.url + 'EnvioMensagem?id=' + this.chamado.Id + '&textomensagem=' + this.content)
+                .then(response => {
+                    this.chamado.MensagensChamado.push({Id: response.data.Id, DataRecebimento: response.data.DataRecebimento, CorpoEmail: this.content, AnexosMensagem: []})
+                    this.destruirResposta()
+                    this.textoAviso = 'Mensagem enviada'
+                    this.aviso = true
+                })
+            },
+            alternarVisibilidadeResposta () {
+               this.botaoAtivo = !this.botaoAtivo
+            },
+            destruirResposta () {
+                this.alternarVisibilidadeResposta()
+                this.content = ''
             }
         }
     }
 </script>
+
+<style>
+    .mt-3{
+        margin-top: 1rem;
+    },
+    .mb-3{
+        margin-bottom: 1rem;
+    }
+
+</style>

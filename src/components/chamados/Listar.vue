@@ -47,6 +47,7 @@
     import {
         Toast,
         QDataTable,
+        QPullToRefresh,
         QField,
         QInput,
         QCheckbox,
@@ -106,6 +107,7 @@
             QDataTable,
             QField,
             QCheckbox,
+            QPullToRefresh,
             QSlider,
             QBtn,
             QIcon,
