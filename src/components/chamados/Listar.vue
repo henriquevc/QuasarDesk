@@ -1,12 +1,7 @@
 <template>
     <div >
-<<<<<<< HEAD
-        <div class="row">    
-            <div class="col-lg-2 col-md-4 p3">
-=======
         <div class="row shadow-10 pb">
             <div class="col-xl-2 col-lg-3 col-md-4 col-xs-12 p3">
->>>>>>> d914ec5ff677d605dcca5ad2d8994afb7b94dd98
                 <q-input v-model="buscaId" type="number" float-label="ID" @change="buscar" />
             </div>
             <div class="col-xl-2 col-lg-3 col-md-4 col-xs-12 p3">
@@ -25,19 +20,11 @@
                 <q-datetime  v-model="buscaDataRecebimento" type="date" format="DD/MM/YYYY" float-label="Data Recebimento" @change="buscar" />
             </div>
         </div>
-<<<<<<< HEAD
-        <div class="row">       
-            <q-data-table :data="chamadosFiltrados" :config="config" :columns="columns">
-                <template slot="col-Id" scope="cell">
-                    <a :href="'/editar/'+cell.data">{{cell.data}}</a>
-                </template>                
-=======
         <div class="row mt2 shadow-10">
             <q-data-table :data="chamadosFiltrados" :config="config" :columns="columns">
                 <template slot="col-Id" scope="cell">
                     <router-link class="text-indigo" :to="'/editar/'+cell.data">{{ cell.data }}</router-link>
                 </template>            
->>>>>>> d914ec5ff677d605dcca5ad2d8994afb7b94dd98
                 <template slot="col-StatusChamado" scope="cell">
                     <span>{{cell.data.Nome}}</span>
                 </template>
