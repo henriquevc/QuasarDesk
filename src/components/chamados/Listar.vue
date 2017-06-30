@@ -82,7 +82,8 @@
                     { label: 'Status', field: 'StatusChamado', width: '60px' },
                     { label: 'Responsável', field: 'ResponsavelChamado', width: '100px' },
                     { label: 'Tipo de Chamado', field: 'TipoChamado', width: '100px' },
-                    { label: 'Data de Recebimento', field: 'DataRecebimento', width: '100px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } }
+                    { label: 'Data de Recebimento', field: 'DataRecebimento', width: '100px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } },
+                    { label: 'Prazo Final', field: 'PrazoFinal', width: '100px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } }
                 ],
                 chamados: [],
                 chamadosFiltrados: [],
@@ -166,7 +167,7 @@
                             Toast.create.positive({ html: 'Chamado ' + row.data.Id + ' Excluído' })
                         }
                         else {
-                            Toast.create.negative({ html: 'Chamado ' + row.data.Id + ' Excluído' })
+                            Toast.create.negative({ html: 'Problemas na Exclusão do Chamado ' + row.data.Id })
                         }
                     })
                 })
