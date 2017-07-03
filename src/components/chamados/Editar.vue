@@ -15,6 +15,9 @@
                     <q-input stack-label="Nome Cliente" :disable="true" v-model="chamado.NomeCliente"/>
                 </q-card>  
             </div>
+            <q-btn round color="primary" class="fixed" style="right: 18px; bottom: 18px" v-show="botaoAtivo" @click="btnresponder">
+                <q-icon right name="reply"/>
+            </q-btn>
             <div class="col-lg-8 col-md-12">
                 <q-card v-for="mensagem in chamado.MensagensChamado" key>
                     <q-card-title class="bg-indigo text-white">
@@ -35,11 +38,11 @@
                 </q-card>   
                 <div class="elevation-10">
                     <div class="mb-3" id="comentario" v-show="!botaoAtivo">
-                        <vue-editor v-model="content" v-show="!botaoAtivo"></vue-editor>
+                        <vue-editor v-model="content" v-show="!botaoAtivo" id="editorHtml"> </vue-editor>
                     </div>
                 </div><!--col-12-->
                 <div class="mb-3 mt-3">
-                    <q-btn flat class="bg-positive text-white" v-show="botaoAtivo" @click="alternarVisibilidadeResposta()">Responder <q-icon right name="reply"/></q-btn>
+                    <q-btn flat class="bg-positive text-white" v-show="botaoAtivo" @click="btnresponder">Responder <q-icon right name="reply"/></q-btn>
                     <q-btn flat class="bg-positive text-white" v-show="!botaoAtivo" @click="enviarMensagem()">Enviar <q-icon right name="send"/></q-btn>
                     <q-btn flat class="bg-negative text-white" v-show="!botaoAtivo" @click="destruirResposta()">Cancelar <q-icon right name="block"/></q-btn>
                 </div><!--col-12-->
@@ -70,7 +73,7 @@
         QSelect,
         QCollapsible,
         QSideLink
-        } from 'quasar'
+    } from 'quasar'
 
     export default {
         components: {
@@ -205,6 +208,13 @@
             destruirResposta () {
                 this.alternarVisibilidadeResposta()
                 this.content = ''
+            },
+            btnresponder () {
+                this.botaoAtivo = !this.botaoAtivo
+                setTimeout(function () {
+                    var top = document.getElementById('editorHtml').offsetTop
+                    window.scrollTo(0, top)
+                }, 100)
             }
         }
     }
