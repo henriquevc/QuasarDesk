@@ -26,16 +26,16 @@
                 <q-data-table :data="chamadosFiltrados" :config="config" :columns="columns">
                     <template slot="col-Id" scope="cell">
                         <router-link class="text-indigo" :to="'/editar/'+cell.data">{{ cell.data }}</router-link>
-                    </template>            
-                    <template slot="col-StatusChamado" scope="cell">
-                        <span>{{cell.data.Nome}}</span>
                     </template>
+                     <template slot="col-StatusChamado" scope="cell">
+                        <q-select class="mt0" v-model="cell.data.Id" filter :options="listaStatus" @change="trocaStatus(cell.data.Id, cell.row.Id)"/>
+                    </template>                    
                     <template slot="col-ResponsavelChamado" scope="cell">
-                        <span>{{cell.data.Nome}}</span>
+                        <q-select class="mt0" v-model="cell.data.Id" filter :options="listaResponsaveis" @change="trocaResponsavel(cell.data.Id, cell.row.Id)"/>
                     </template>
                     <template slot="col-TipoChamado" scope="cell">
-                        <span>{{cell.data.Nome}}</span>
-                    </template>
+                        <q-select class="mt0" v-model="cell.data.Id" filter :options="listaTiposChamado" @change="trocaTipoChamado(cell.data.Id, cell.row.Id)"/>
+                    </template>                    
                     <template slot="selection" scope="props">
                         <q-btn flat color="primary" @click="excluir(props)">
                             <q-icon name="delete" />
@@ -69,25 +69,27 @@
         data () {
             return {
                 config: {
-                    rowHeight: '3rem',
+                    rowHeight: '3.6rem',
                     selection: 'multiple',
                     messages: {
-                        noData: '<i class="material-icons">warning</i> Sem dados para mostrar.'
+                        noData: '<q-icon name="warning"/> Sem dados para mostrar.'
                     },
-                    selected: {
-                        singular: 'item selecionado.',
-                        plural: 'itens selecionado.'
+                    labels: {
+                        selected: {
+                            singular: 'item selecionado.',
+                            plural: 'itens selecionados.'
+                        }
                     }
                 },
                 columns: [
-                    { label: 'ID', field: 'Id', width: '50px', sort: true, type: 'number' },
+                    { label: 'ID', field: 'Id', width: '30px', sort: true, type: 'number' },
                     { label: 'Assunto', field: 'Assunto', width: '140px' },
                     { label: 'Remetente', field: 'NomeCliente', width: '100px', sort: true, type: 'string' },
                     { label: 'Status', field: 'StatusChamado', width: '60px' },
-                    { label: 'Responsável', field: 'ResponsavelChamado', width: '100px' },
-                    { label: 'Tipo de Chamado', field: 'TipoChamado', width: '100px' },
-                    { label: 'Data de Recebimento', field: 'DataRecebimento', width: '100px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } },
-                    { label: 'Prazo Final', field: 'PrazoFinal', width: '100px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } }
+                    { label: 'Responsável', field: 'ResponsavelChamado', width: '50px' },
+                    { label: 'Tipo de Chamado', field: 'TipoChamado', width: '60px' },
+                    { label: 'Data de Recebimento', field: 'DataRecebimento', width: '60px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } },
+                    { label: 'Prazo Final', field: 'PrazoFinal', width: '60px', type: 'date', sort: true, format (value, row) { return new Date(value).toLocaleString() } }
                 ],
                 chamados: [],
                 chamadosFiltrados: [],
@@ -216,6 +218,72 @@
                         this.chamadosFiltrados = this.chamados.slice(0) // copia do vetor
                     })
                 }, 1000)
+            },
+            trocaResponsavel (value, id) {
+                let self = this
+                axios.put('http://servagilus.dyndns.org:9801/api/TrocaResponsavelChamado?id=' + id + '&responsavelid=' + value)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        self.chamadosFiltrados.forEach(function (chamado) {
+                            if (chamado.Id === id) {
+                                if (value === '') {
+                                    chamado.ResponsavelChamado.Id = null
+                                }
+                                else {
+                                    chamado.ResponsavelChamado.Id = value
+                                }
+                            }
+                        })
+                        Toast.create.positive({ html: 'Responsavel Atualizado' })
+                    }
+                    else {
+                        Toast.create.negative({ html: 'Problemas na Atualização do Responsavel' })
+                    }
+                })
+            },
+            trocaTipoChamado (value, id) {
+                let self = this
+                axios.put('http://servagilus.dyndns.org:9801/api/TrocaTipoChamado?id=' + id + '&tipoChamadoId=' + value)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        self.chamadosFiltrados.forEach(function (chamado) {
+                            if (chamado.Id === id) {
+                                if (value === '') {
+                                    chamado.TipoChamado.Id = null
+                                }
+                                else {
+                                    chamado.TipoChamado.Id = value
+                                }
+                            }
+                        })
+                        Toast.create.positive({ html: 'Tipo de Chamado Atualizado' })
+                    }
+                    else {
+                        Toast.create.negative({ html: 'Problemas na Atualização do Tipo de Chamado' })
+                    }
+                })
+            },
+            trocaStatus (value, id) {
+                let self = this
+                axios.put('http://servagilus.dyndns.org:9801/api/TrocaStatusChamado?id=' + id + '&statusid=' + value)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        self.chamadosFiltrados.forEach(function (chamado) {
+                            if (chamado.Id === id) {
+                                if (value === '') {
+                                    chamado.StatusChamado.Id = null
+                                }
+                                else {
+                                    chamado.StatusChamado.Id = value
+                                }
+                            }
+                        })
+                        Toast.create.positive({ html: 'Status do Chamado Atualizado' })
+                    }
+                    else {
+                        Toast.create.negative({ html: 'Problemas na Atualização do Status do Chamado' })
+                    }
+                })
             }
         }
     }
@@ -226,6 +294,8 @@
         padding 0 .75rem
     .mt2
         margin-top 2rem
+    .mt0
+        margin-top 0rem           
     .pb
         padding-bottom 1.8rem
 </style>
