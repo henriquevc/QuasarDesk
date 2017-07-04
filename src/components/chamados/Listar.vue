@@ -131,10 +131,10 @@
                 this.chamados = response.data
                 this.chamados.forEach(function (chamado) {
                     if (!chamado.TipoChamado) {
-                        chamado.TipoChamado = { Nome: '' }
+                        chamado.TipoChamado = { Nome: '', Id: null }
                     }
                     if (!chamado.ResponsavelChamado) {
-                        chamado.ResponsavelChamado = { Nome: '' }
+                        chamado.ResponsavelChamado = { Nome: '', Id: null }
                     }
                 })
                 this.chamadosFiltrados = this.chamados.slice(0) // copia do vetor
@@ -149,7 +149,7 @@
                     return {label: obj.Nome, value: obj.Id}
                 })
                 // this.listaStatusTable = this.listaStatus
-                this.listaStatus.unshift({ label: '', value: '' })
+                this.listaStatus.unshift({ label: '', value: null })
             })
 
             axios.get(url + 'ResponsavelChamados')
@@ -157,7 +157,7 @@
                 this.listaResponsaveis = response.data.map(function (obj) {
                     return {label: obj.Nome, value: obj.Id}
                 })
-                this.listaResponsaveis.unshift({ label: '', value: '' })
+                this.listaResponsaveis.unshift({ label: '', value: null })
             })
 
             axios.get(url + 'TipoChamados')
@@ -165,7 +165,7 @@
                 this.listaTiposChamado = response.data.map(function (obj) {
                     return {label: obj.Nome, value: obj.Id}
                 })
-                this.listaTiposChamado.unshift({ label: '', value: '' })
+                this.listaTiposChamado.unshift({ label: '', value: null })
             })
         },
         methods: {
@@ -214,10 +214,10 @@
                         this.chamados = response.data
                         this.chamados.forEach(function (chamado) {
                             if (!chamado.TipoChamado) {
-                                chamado.TipoChamado = { Nome: '' }
+                                chamado.TipoChamado = { Nome: '', Id: null }
                             }
                             if (!chamado.ResponsavelChamado) {
-                                chamado.ResponsavelChamado = { Nome: '' }
+                                chamado.ResponsavelChamado = { Nome: '', Id: null }
                             }
                         })
                         this.chamadosFiltrados = this.chamados.slice(0) // copia do vetor
@@ -231,12 +231,7 @@
                     if (response.status === 200) {
                         self.chamadosFiltrados.forEach(function (chamado) {
                             if (chamado.Id === id) {
-                                if (value === '') {
-                                    chamado.ResponsavelChamado.Id = null
-                                }
-                                else {
-                                    chamado.ResponsavelChamado.Id = value
-                                }
+                                chamado.ResponsavelChamado.Id = value
                             }
                         })
                         Toast.create.positive({ html: 'Responsavel Atualizado' })
@@ -253,12 +248,7 @@
                     if (response.status === 200) {
                         self.chamadosFiltrados.forEach(function (chamado) {
                             if (chamado.Id === id) {
-                                if (value === '') {
-                                    chamado.TipoChamado.Id = null
-                                }
-                                else {
-                                    chamado.TipoChamado.Id = value
-                                }
+                                chamado.TipoChamado.Id = value
                             }
                         })
                         Toast.create.positive({ html: 'Tipo de Chamado Atualizado' })
@@ -275,12 +265,7 @@
                     if (response.status === 200) {
                         self.chamadosFiltrados.forEach(function (chamado) {
                             if (chamado.Id === id) {
-                                if (value === '') {
-                                    chamado.StatusChamado.Id = null
-                                }
-                                else {
-                                    chamado.StatusChamado.Id = value
-                                }
+                                chamado.StatusChamado.Id = value
                             }
                         })
                         Toast.create.positive({ html: 'Status do Chamado Atualizado' })
