@@ -1,5 +1,5 @@
 <template>
-    <q-pull-to-refresh pull-message refresh-icon :handler="refresher">
+    <q-pull-to-refresh pull-message="Puxe para baixo para atualizar" release-message="solte vagabundo" refresh-message="atualizando..."  refresh-icon :handler="refresher" >
         <div >
             </q-btn>
             <div class="row shadow-10 pb">
@@ -28,7 +28,7 @@
                         <router-link class="text-indigo" :to="'/editar/'+cell.data">{{ cell.data }}</router-link>
                     </template>
                      <template slot="col-StatusChamado" scope="cell">
-                        <q-select class="mt0" v-model="cell.data.Id" filter :options="listaStatus" @change="trocaStatus(cell.data.Id, cell.row.Id)"/>
+                        <q-select class="mt0" v-model="cell.data.Id" filter :options="listaStatusTable" @change="trocaStatus(cell.data.Id, cell.row.Id)"/>
                     </template>                    
                     <template slot="col-ResponsavelChamado" scope="cell">
                         <q-select class="mt0" v-model="cell.data.Id" filter :options="listaResponsaveis" @change="trocaResponsavel(cell.data.Id, cell.row.Id)"/>
@@ -101,6 +101,7 @@
                 buscaTipoChamado: '',
                 buscaStatus: '',
                 listaStatus: [],
+                listaStatusTable: [],
                 listaResponsaveis: [],
                 listaTiposChamado: []
             }
@@ -144,6 +145,10 @@
                 this.listaStatus = response.data.map(function (obj) {
                     return {label: obj.Nome, value: obj.Id}
                 })
+                this.listaStatusTable = response.data.map(function (obj) {
+                    return {label: obj.Nome, value: obj.Id}
+                })
+                // this.listaStatusTable = this.listaStatus
                 this.listaStatus.unshift({ label: '', value: '' })
             })
 
