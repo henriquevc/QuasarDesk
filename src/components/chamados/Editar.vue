@@ -1,27 +1,27 @@
 <template>
     <div>
-        <q-tabs align="justify" v-model="selectedTab">
+        <q-tabs align="justify" class="mb-1 shadow-10" style="margin-bottom: 16px;" v-model="selectedTab">
             <q-tab slot="title" :name="status.label" :icon="status.icone" v-for="status in listaStatus" key @select="trocaStatus(status.value)">{{status.label}}</q-tab>
         </q-tabs>
         <div class="row">
             <div class="col-lg-4 col-md-12">
-                <q-card>
-                    <q-input stack-label="Assunto" :disable="true" v-model="chamado.Assunto"/>
-                    <q-input stack-label="Email" :disable="true" v-model="chamado.Email"/>
-                    <q-select v-model="responsavelId" filter float-label="Responsávl" :options="listaResponsaveis" @change="trocaResponsavel"/>
+                <q-card class="pa-1 shadow-10">
+                    <q-input stack-label="Assunto" readonly v-model="chamado.Assunto"/>
+                    <q-input stack-label="E-mail" readonly v-model="chamado.Email"/>
+                    <q-select v-model="responsavelId" filter float-label="Responsável" :options="listaResponsaveis" @change="trocaResponsavel"/>
                     <q-select v-model="tipoChamadoId" filter float-label="Tipo Chamado" :options="listaTiposChamado" @change="trocaTipoChamado"/>
-                    <q-input stack-label="Prazo Final" :disable="true" v-model="chamado.PrazoFinal"/>
+                    <q-input stack-label="Prazo Final" readonly v-model="chamado.PrazoFinal"/>
                     <q-input stack-label="Prazo Finalização" :disable="true" v-model="chamado.DataFinalizacao"/>
-                    <q-input stack-label="Nome Cliente" :disable="true" v-model="chamado.NomeCliente"/>
+                    <q-input stack-label="Nome Cliente" readonly v-model="chamado.NomeCliente"/>
                 </q-card>  
             </div>
-            <q-btn round color="primary" class="fixed" style="right: 18px; bottom: 18px" v-show="botaoAtivo" @click="btnresponder">
+            <q-btn round color="primary" class="fixed" style="right: 2rem; bottom: 2rem;" v-show="botaoAtivo" @click="btnresponder">
                 <q-icon right name="reply"/>
             </q-btn>
             <div class="col-lg-8 col-md-12">
                 <q-card v-for="mensagem in chamado.MensagensChamado" key>
-                    <q-card-title class="bg-indigo text-white">
-                        #{{mensagem.Id}} - {{mensagem.DataRecebimento}}
+                    <q-card-title class="bg-secondary text-white">
+                        #{{mensagem.Id}} - {{ mensagem.DataRecebimento }}
                         <q-icon color="white" slot="right" name="attach file" v-if="mensagem.AnexosMensagem.length > 0">
                                 <q-popover ref="popover">
                                     <q-list link class="no-border">
@@ -33,16 +33,15 @@
                         </q-icon>                        
                     </q-card-title>
                     <q-card-main>
-                       <div v-html="mensagem.CorpoEmail"/>
+                       <div class="pa-1" v-html="mensagem.CorpoEmail"/>
                     </q-card-main>                
                 </q-card>   
                 <div class="elevation-10">
-                    <div class="mb-3" id="comentario" v-show="!botaoAtivo">
+                    <div class="mb-1" id="comentario" v-show="!botaoAtivo">
                         <vue-editor v-model="content" v-show="!botaoAtivo" id="editorHtml"> </vue-editor>
                     </div>
                 </div><!--col-12-->
-                <div class="mb-3 mt-3">
-                    <q-btn flat class="bg-positive text-white" v-show="botaoAtivo" @click="btnresponder">Responder <q-icon right name="reply"/></q-btn>
+                <div class="mb-1 mt-1">
                     <q-btn flat class="bg-positive text-white" v-show="!botaoAtivo" @click="enviarMensagem()">Enviar <q-icon right name="send"/></q-btn>
                     <q-btn flat class="bg-negative text-white" v-show="!botaoAtivo" @click="destruirResposta()">Cancelar <q-icon right name="block"/></q-btn>
                 </div><!--col-12-->
@@ -221,11 +220,14 @@
 </script>
 
 <style>
-    .mt-3{
+    .mt-1{
         margin-top: 1rem;
     },
-    .mb-3{
+    .mb-1{
         margin-bottom: 1rem;
+    }
+    .pa-1{
+        padding: 1rem;
     }
 
 </style>

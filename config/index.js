@@ -20,7 +20,7 @@ module.exports = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
-    publicPath: '',
+    publicPath: '/',
     productionSourceMap: false,
 
     // Remove unused CSS
