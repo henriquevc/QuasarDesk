@@ -8,16 +8,18 @@
                 <q-card class="pa-1 shadow-10 bg-white">
                     <q-input stack-label="Assunto" readonly v-model="chamado.Assunto"/>
                     <q-input stack-label="E-mail" readonly v-model="chamado.Email"/>
-                    <q-select v-model="responsavelId" filter float-label="Responsável" :options="listaResponsaveis" @change="trocaResponsavel"/>
-                    <q-select v-model="tipoChamadoId" filter float-label="Tipo Chamado" :options="listaTiposChamado" @change="trocaTipoChamado"/>
+                    <q-select v-model="chamado.ResponsavelId" filter float-label="Responsável" :options="listaResponsaveis" @change="trocaResponsavel"/>
+                    <q-select v-model="chamado.TipoChamadoId" filter float-label="Tipo Chamado" :options="listaTiposChamado" @change="trocaTipoChamado"/>
                     <q-input stack-label="Prazo Final" readonly v-model="chamado.PrazoFinal"/>
                     <q-input stack-label="Prazo Finalização" :disable="true" v-model="chamado.DataFinalizacao"/>
                     <q-input stack-label="Nome Cliente" readonly v-model="chamado.NomeCliente"/>
                 </q-card>  
             </div>
-            <q-btn round color="primary" class="fixed" style="right: 2rem; bottom: 2rem;" v-show="botaoAtivo" @click="btnresponder">
-                <q-icon right name="reply"/>
-            </q-btn>
+            <q-fab direction="up" class="fixed" style="right: 2rem; bottom: .5rem; z-index: 1" color="primary" icon="keyboard_arrow_up">
+                  <q-fab-action round color="red" v-show="!chamado.Excluido" @click="excluir" icon="delete"/>   
+                  <q-fab-action round color="tertiary" v-show="chamado.Excluido" @click="excluir" icon="undo"/> 
+                  <q-fab-action round color="info" v-show="botaoAtivo" @click="btnresponder" icon="reply"/>                    
+            </q-fab>                                
             <div class="col-lg-8 col-md-12">
                 <q-card v-for="mensagem in chamado.MensagensChamado" key class="bg-white shadow-10" style="margin-bottom: 1rem;">
                     <q-card-title class="bg-secondary text-white">
@@ -56,6 +58,8 @@
     import 'quasar-extras/material-icons'
     import {
         Toast,
+        QFab,
+        QFabAction,
         QTabs,
         QItem,
         QItemMain,
@@ -76,6 +80,8 @@
 
     export default {
         components: {
+            QFab,
+            QFabAction,
             QTabs,
             QItem,
             QItemMain,
@@ -126,29 +132,25 @@
                     this.listaStatus[2].icone = 'done'
                     this.listaStatus[3].icone = 'stop'
                     this.selectedTab = this.chamado.StatusChamado.Nome
-                    this.tipoChamadoId = this.chamado.TipoChamado.Id
-                    this.responsavelId = this.chamado.ResponsavelChamado.Id
                 })
                 axios.get('http://servagilus.dyndns.org:9801/api/ResponsavelChamados')
                 .then(response => {
                     this.listaResponsaveis = response.data.map(function (obj) {
                         return {label: obj.Nome, value: obj.Id}
                     })
+                    this.listaResponsaveis.unshift({ label: '', value: null })
                 })
                 axios.get('http://servagilus.dyndns.org:9801/api/TipoChamados')
                 .then(response => {
                     this.listaTiposChamado = response.data.map(function (obj) {
                         return {label: obj.Nome, value: obj.Id}
                     })
+                    this.listaTiposChamado.unshift({ label: '', value: null })
                 })
             })
         },
         methods: {
             trocaResponsavel (value) {
-                let self = this
-                self.responsavel = self.listaResponsaveis.find(function (responsaveis) {
-                    return (responsaveis.value === value)
-                })
                 axios.put('http://servagilus.dyndns.org:9801/api/TrocaResponsavelChamado?id=' + this.chamado.Id + '&responsavelid=' + value)
                 .then(function (response) {
                     if (response.status === 200) {
@@ -160,10 +162,6 @@
                 })
             },
             trocaTipoChamado (value) {
-                let self = this
-                self.tipoChamado = self.listaTiposChamado.find(function (responsaveis) {
-                    return (responsaveis.value === value)
-                })
                 axios.put('http://servagilus.dyndns.org:9801/api/TrocaTipoChamado?id=' + this.chamado.Id + '&tipoChamadoId=' + value)
                 .then(function (response) {
                     if (response.status === 200) {
@@ -214,6 +212,23 @@
                     var top = document.getElementById('editorHtml').offsetTop
                     window.scrollTo(0, top)
                 }, 100)
+            },
+            excluir () {
+                axios.delete(this.url + 'Chamados/' + this.chamado.Id).then(response => {
+                    if (response.status === 200) {
+                        if (this.chamado.Excluido) {
+                            this.chamado.Excluido = false
+                            Toast.create.positive({ html: 'Chamado ' + this.chamado.Id + ' Restaurado' })
+                        }
+                        else {
+                            this.chamado.Excluido = true
+                            Toast.create.positive({ html: 'Chamado ' + this.chamado.Id + ' Excluído' })
+                        }
+                    }
+                    else {
+                        Toast.create.negative({ html: 'Problemas na Exclusão do Chamado ' + this.chamado.Id })
+                    }
+                })
             }
         }
     }
