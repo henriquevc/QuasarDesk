@@ -1,5 +1,5 @@
 <template>
-    <q-pull-to-refresh pull-message="Puxe para baixo para atualizar" release-message="solte" refresh-message="atualizando..."  refresh-icon :handler="refresher" >
+    <q-pull-to-refresh pull-message="Puxe para baixo para atualizar" release-message="Solte para atualizar" refresh-message="Atualizando..."  refresh-icon :handler="refresher" >
         <div >
             </q-btn>
             <div class="row shadow-10 pb bg-white">
