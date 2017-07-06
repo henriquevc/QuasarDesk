@@ -32,7 +32,7 @@ module.exports = {
     cssSourceMap: true,
     // auto open browser or not
     openBrowser: true,
-    publicPath: '/',
+    publicPath: '',
     port: 8081,
 
     // If for example you are using Quasar Play

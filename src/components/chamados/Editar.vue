@@ -5,7 +5,7 @@
         </q-tabs>
         <div class="row">
             <div class="col-lg-4 col-md-12">
-                <q-card class="pa-1 shadow-10">
+                <q-card class="pa-1 shadow-10 bg-white">
                     <q-input stack-label="Assunto" readonly v-model="chamado.Assunto"/>
                     <q-input stack-label="E-mail" readonly v-model="chamado.Email"/>
                     <q-select v-model="responsavelId" filter float-label="Responsável" :options="listaResponsaveis" @change="trocaResponsavel"/>
@@ -19,7 +19,7 @@
                 <q-icon right name="reply"/>
             </q-btn>
             <div class="col-lg-8 col-md-12">
-                <q-card v-for="mensagem in chamado.MensagensChamado" key>
+                <q-card v-for="mensagem in chamado.MensagensChamado" key class="bg-white shadow-10" style="margin-bottom: 1rem;">
                     <q-card-title class="bg-secondary text-white">
                         #{{mensagem.Id}} - {{ mensagem.DataRecebimento }}
                         <q-icon color="white" slot="right" name="attach file" v-if="mensagem.AnexosMensagem.length > 0">
@@ -37,7 +37,7 @@
                     </q-card-main>                
                 </q-card>   
                 <div class="elevation-10">
-                    <div class="mb-1" id="comentario" v-show="!botaoAtivo">
+                    <div class="mb-1 bg-white" id="comentario" v-show="!botaoAtivo">
                         <vue-editor v-model="content" v-show="!botaoAtivo" id="editorHtml"> </vue-editor>
                     </div>
                 </div><!--col-12-->

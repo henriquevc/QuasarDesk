@@ -1,7 +1,7 @@
 <template>
   <!-- Don't drop "q-app" class -->
   <div id="q-app">
-    <q-layout ref="layout" view="lHh Lpr fff" :left-class="{'lime-4': true}">
+    <q-layout ref="layout" view="lHh Lpr fff" :left-class="{'bg-secondary': true, 'text-white': true}">
 
       <q-toolbar slot="header">
         <q-btn flat @click="$refs.layout.toggleLeft()">
@@ -22,15 +22,15 @@
         -->
         <q-list no-border link inset-delimiter>
           <q-side-link item to="/listar/trabalhaveis">
-            <q-item-side icon="work" />
+            <q-item-side icon="work" color="white" />
             <q-item-main label="Abertos" />
           </q-side-link>
           <q-side-link item to="/listar/fechados">
-            <q-item-side icon="highlight_off" />
+            <q-item-side icon="highlight_off" color="white" />
             <q-item-main label="Fechados"/>
           </q-side-link>
           <q-side-link item to="/listar/todos">
-            <q-item-side icon="list" />
+            <q-item-side icon="list" color="white" />
             <q-item-main label="Todos" />
           </q-side-link>
         </q-list>
@@ -41,7 +41,7 @@
         <router-view /> component
         if using subRoutes
       -->
-      <div class="layout-padding">
+      <div class="layout-padding bg-light">
         <!-- your content -->
         <router-view :key="$route.path"/>
       </div>

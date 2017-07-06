@@ -1,8 +1,8 @@
 <template>
-    <q-pull-to-refresh pull-message="Puxe para baixo para atualizar" release-message="solte vagabundo" refresh-message="atualizando..."  refresh-icon :handler="refresher" >
+    <q-pull-to-refresh pull-message="Puxe para baixo para atualizar" release-message="solte" refresh-message="atualizando..."  refresh-icon :handler="refresher" >
         <div >
             </q-btn>
-            <div class="row shadow-10 pb">
+            <div class="row shadow-10 pb bg-white">
                 <div class="col-xl-2 col-lg-3 col-md-4 col-xs-12 p3">
                     <q-input v-model="buscaId" type="number" float-label="ID" @change="buscar" />
                 </div>
@@ -22,10 +22,10 @@
                     <q-datetime  v-model="buscaDataRecebimento" type="date" format="DD/MM/YYYY" float-label="Data Recebimento" @change="buscar" />
                 </div>
             </div>
-            <div class="row mt2 shadow-10">
+            <div class="row mt2 shadow-10 bg-white">
                 <q-data-table :data="chamadosFiltrados" :config="config" :columns="columns">
                     <template slot="col-Id" scope="cell">
-                        <router-link class="text-indigo" :to="'/editar/'+cell.data">{{ cell.data }}</router-link>
+                        <router-link class="text-teal bold" :to="'/editar/'+cell.data">{{ cell.data }}</router-link>
                     </template>
                      <template slot="col-StatusChamado" scope="cell">
                         <q-select class="mt0" v-model="cell.data.Id" filter :options="listaStatusTable" @change="trocaStatus(cell.data.Id, cell.row.Id)"/>
@@ -288,4 +288,8 @@
         margin-top 0rem           
     .pb
         padding-bottom 1.8rem
+    .bold
+        font-weight bold
+    tr
+        backgroud-color white
 </style>
