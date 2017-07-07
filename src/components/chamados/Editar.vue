@@ -1,7 +1,7 @@
 <template>
     <div>
-        <q-tabs align="justify" class="mb-1 shadow-10" style="margin-bottom: 16px;" v-model="selectedTab">
-            <q-tab slot="title" :name="status.label" :icon="status.icone" v-for="status in listaStatus" key @select="trocaStatus(status.value)">{{status.label}}</q-tab>
+        <q-tabs align="justify" class="mb-1 shadow-10" style="margin-bottom: 16px;" v-if="chamado.StatusChamado" v-model="chamado.StatusChamado.Nome">
+            <q-tab slot="title" :name="status.label" :icon="status.icone" v-for="status in listaStatus" key @select="trocaStatus(status.value, status.label)">{{status.label}}</q-tab>
         </q-tabs>
         <div class="row">
             <div class="col-lg-4 col-md-12">
@@ -37,16 +37,18 @@
                     <q-card-main>
                        <div class="pa-1" v-html="mensagem.CorpoEmail"/>
                     </q-card-main>                
-                </q-card>   
-                <div class="elevation-10">
-                    <div class="mb-1 bg-white" id="comentario" v-show="!botaoAtivo">
-                        <vue-editor v-model="content" v-show="!botaoAtivo" id="editorHtml"> </vue-editor>
-                    </div>
-                </div><!--col-12-->
+                </q-card>
+                <q-card>
+                    <div class="elevation-10">
+                        <div class="mb-1 bg-white" id="comentario" v-show="!botaoAtivo" style=" height: 324px;">
+                            <vue-editor v-model="content" v-show="!botaoAtivo" id="editorHtml" style=" height: 285px;"> </vue-editor>
+                        </div>
+                    </div><!--col-12-->
+                </q-card>          
                 <div class="mb-1 mt-1">
                     <q-btn flat class="bg-positive text-white" v-show="!botaoAtivo" @click="enviarMensagem()">Enviar <q-icon right name="send"/></q-btn>
                     <q-btn flat class="bg-negative text-white" v-show="!botaoAtivo" @click="destruirResposta()">Cancelar <q-icon right name="block"/></q-btn>
-                </div><!--col-12-->
+                </div><!--col-12-->                         
             </div>            
         </div>
     </div>
@@ -106,7 +108,6 @@
                 listaStatus: [],
                 listaResponsaveis: [],
                 listaTiposChamado: [],
-                selectedTab: null,
                 tipoChamadoId: null,
                 responsavelId: null,
                 responsavel: {},
@@ -131,8 +132,8 @@
                     this.listaStatus[1].icone = 'build'
                     this.listaStatus[2].icone = 'done'
                     this.listaStatus[3].icone = 'stop'
-                    this.selectedTab = this.chamado.StatusChamado.Nome
                 })
+
                 axios.get('http://servagilus.dyndns.org:9801/api/ResponsavelChamados')
                 .then(response => {
                     this.listaResponsaveis = response.data.map(function (obj) {
@@ -140,6 +141,7 @@
                     })
                     this.listaResponsaveis.unshift({ label: '', value: null })
                 })
+
                 axios.get('http://servagilus.dyndns.org:9801/api/TipoChamados')
                 .then(response => {
                     this.listaTiposChamado = response.data.map(function (obj) {
@@ -172,7 +174,7 @@
                     }
                 })
             },
-            trocaStatus (value) {
+            trocaStatus (value, label) {
                 let self = this
                 if (value !== self.chamado.StatusId) {
                     self.statusChamado = self.listaStatus.find(function (responsaveis) {
@@ -181,13 +183,14 @@
                     axios.put('http://servagilus.dyndns.org:9801/api/TrocaStatusChamado?id=' + this.chamado.Id + '&statusid=' + value)
                     .then(function (response) {
                         if (response.status === 200) {
+                            self.chamado.StatusId = value
+                            self.chamado.StatusChamado.Nome = label
                             Toast.create.positive({ html: 'Status do Chamado Atualizado' })
                         }
                         else {
                             Toast.create.negative({ html: 'Problemas na Atualização do Status do Chamado' })
                         }
                     })
-                    self.chamado.StatusId = value
                 }
             },
             enviarMensagem () {
