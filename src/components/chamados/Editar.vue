@@ -221,11 +221,11 @@
                     if (response.status === 200) {
                         if (this.chamado.Excluido) {
                             this.chamado.Excluido = false
-                            Toast.create.positive({ html: 'Chamado ' + this.chamado.Id + ' Restaurado' })
+                            Toast.create.positive({ html: 'Chamado ' + this.chamado.Id + ' Restaurado da Lixeira' })
                         }
                         else {
                             this.chamado.Excluido = true
-                            Toast.create.positive({ html: 'Chamado ' + this.chamado.Id + ' Excluído' })
+                            Toast.create.positive({ html: 'Chamado ' + this.chamado.Id + ' Enviado para a Lixeira' })
                         }
                     }
                     else {
