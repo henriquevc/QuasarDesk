@@ -32,6 +32,11 @@ export default new VueRouter({
       component: load('chamados/Listar')
     },
     {
+      path: '/controle/:tipoStatus',
+      name: 'Controle',
+      component: load('chamados/Controle')
+    },
+    {
       path: '/editar/:id',
       name: 'Editar',
       component: load('chamados/Editar')

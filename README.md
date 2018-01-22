@@ -9,7 +9,7 @@
 # install dependencies
 $ npm install
 
-# serve with hot reload at localhost:8080
+# serve with hot reload at http://servagilus.dyndns.org.dyndns.org:8080
 $ quasar dev
 
 # build for production with minification

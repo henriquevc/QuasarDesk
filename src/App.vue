@@ -9,7 +9,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          <q-icon name="headset_mic" /> <span>Agilus Desk</span>
+          <router-link class="text-white bold" to='/listar/trabalhaveis'> <q-icon name="headset_mic" /> <span>Agilus Desk</span> </router-link> 
           <div slot="subtitle">Sistema para gerenciamento de chamados</div>
         </q-toolbar-title>
       </q-toolbar>
@@ -23,15 +23,23 @@
         <q-list no-border link inset-delimiter>
           <q-side-link item to="/listar/trabalhaveis">
             <q-item-side icon="work" color="white" />
-            <q-item-main label="Abertos" />
+            <q-item-main label="Abertos" @click="$refs.layout.toggleLeft()"/>
           </q-side-link>
           <q-side-link item to="/listar/fechados">
             <q-item-side icon="highlight_off" color="white" />
-            <q-item-main label="Fechados"/>
+            <q-item-main label="Fechados" @click="$refs.layout.toggleLeft()"/>
           </q-side-link>
+          <q-side-link item to="/controle/bases">
+            <q-item-side icon="date range" color="white" />
+            <q-item-main label="Controle" @click="$refs.layout.toggleLeft()"/>
+          </q-side-link>
+          <q-side-link item to="/listar/excluidos">
+            <q-item-side icon="delete" color="white" />
+            <q-item-main label="Excluidos" @click="$refs.layout.toggleLeft()"/>   
+          </q-side-link>                             
           <q-side-link item to="/listar/todos">
             <q-item-side icon="list" color="white" />
-            <q-item-main label="Todos" />
+            <q-item-main label="Todos" @click="$refs.layout.toggleLeft()"/>
           </q-side-link>
         </q-list>
       </div>
@@ -50,46 +58,12 @@
 </template>
 
 <script>
-import {
-  QLayout,
-  QToolbar,
-  QToolbarTitle,
-  QSearch,
-  QTabs,
-  QRouteTab,
-  QBtn,
-  QIcon,
-  QItemSide,
-  QItemMain,
-  QSideLink,
-  QListHeader,
-  QScrollArea,
-  QList,
-  QInput,
-  QAjaxBar
-} from 'quasar'
+import {QLayout, QToolbar, QToolbarTitle, QSearch, QTabs, QRouteTab, QBtn, QIcon, QItemSide, QItemMain, QSideLink, QListHeader, QScrollArea, QList, QInput, QAjaxBar} from 'quasar'
 /*
  * Root component
  */
 export default {
-  components: {
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QSearch,
-    QTabs,
-    QRouteTab,
-    QBtn,
-    QIcon,
-    QItemSide,
-    QItemMain,
-    QSideLink,
-    QListHeader,
-    QScrollArea,
-    QList,
-    QInput,
-    QAjaxBar
-  },
+  components: { QLayout, QToolbar, QToolbarTitle, QSearch, QTabs, QRouteTab, QBtn, QIcon, QItemSide, QItemMain, QSideLink, QListHeader, QScrollArea, QList, QInput, QAjaxBar },
   data () {
     return {
     }
@@ -100,4 +74,6 @@ export default {
 <style lang="stylus">
     .layout-padding
       padding 1rem 2rem
+      min-height 100vh
+      height 100%
 </style>
